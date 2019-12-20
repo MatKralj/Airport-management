@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>index</title>
+            </f:facet>
+        </h:head>
+        
+        <h:body>
+                <p:layout fullPage="true">
+                    <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                        <p:menu>
+                            <p:submenu label="Izbornik">
+                                <p:menuitem value="Početna" url="index.xhtml" />
+                            </p:submenu>
+                        </p:menu>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+                        <h:form id="forma">
+                            <h:panelGrid columns="3">
+                                <h:commandButton id="status_btn" value="Provjeri server" action="#{upravljanjeUticnicom.trenutniStatusPosluzitelja()}">
+                                    <f:ajax event="click" render="labelOdgovorServer"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="pauza_btn" value="Pauzriaj preuzimanje ostalih komandi" action="#{upravljanjeUticnicom.pauziraj()}">
+                                    <f:ajax event="click" render="labelOdgovorServer"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="kreni_btn" value="Nastavi s preuzimanjem ostalih komandi" action="#{upravljanjeUticnicom.kreni()}">
+                                    <f:ajax event="click" render="labelOdgovorServer"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="pasivno_btn" value="Pasiviraj preuzimanje aviona" action="#{upravljanjeUticnicom.pasiviraj()}">
+                                    <f:ajax event="click" render="labelOdgovorServer"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="aktivno_btn" value="Nastavi preuzimati avione" action="#{upravljanjeUticnicom.aktiviraj()}">
+                                    <f:ajax event="click" render="labelOdgovorServer"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="stani_btn" value="Završi rad" action="#{upravljanjeUticnicom.zavrsiRad()}">
+                                    <f:ajax event="click" render="labelOdgovorServer"/>
+                                </h:commandButton>
+                                
+                                <h:outputText id="labelOdgovorServer" value="#{upravljanjeUticnicom.primljenaPorukaServer}" />
+                                <br/>
+                                <br/><p:outputLabel/>
+                                <h:commandButton id="statusGr_btn" value="Provjeri grupu" action="#{upravljanjeUticnicom.provjeriGrupu()}">
+                                    <f:ajax event="click" render="labelOdgovorGrupa"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="dodajGr_btn" value="Dodaj grupu" action="#{upravljanjeUticnicom.dodajGrupu()}">
+                                    <f:ajax event="click" render="labelOdgovorGrupa"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="odaviGr_btn" value="Odjavi grupu" action="#{upravljanjeUticnicom.odjaviGrupu()}">
+                                    <f:ajax event="click" render="labelOdgovorGrupa"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="aktivirajGr_btn" value="Aktiviraj grupu" action="#{upravljanjeUticnicom.aktivirajGrupu()}">
+                                    <f:ajax event="click" render="labelOdgovorGrupa"/>
+                                </h:commandButton>
+                                
+                                <h:commandButton id="blokirajGr_btn" value="Blokiraj grupu" action="#{upravljanjeUticnicom.blokirajGrupu()}">
+                                    <f:ajax event="click" render="labelOdgovorGrupa"/>
+                                </h:commandButton>
+ 
+                                <h:outputText id="labelOdgovorGrupa" value="#{upravljanjeUticnicom.primljenaPorukaGrupa}" />
+                            </h:panelGrid>
+                            
+
+                        </h:form>
+                    </p:layoutUnit>
+                </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{lokalizacija.jezik}" >
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        </h:head>
+
+        <h:body>
+
+            <div id="odabirJezik" class="center_content">
+                <h:form>
+                    <h:selectOneRadio value="#{lokalizacija.jezik}">
+                        <f:selectItem itemValue="hr" 
+                                      itemLabel="#{internac['index.jezik.hr']}"/>
+                        <f:selectItem itemValue="en" 
+                                      itemLabel="#{internac['index.jezik.en']}"/>
+                        <f:selectItem itemValue="de" 
+                                      itemLabel="#{internac['index.jezik.de']}"/>
+                    </h:selectOneRadio>
+                    <h:commandButton value="#{internac['index.izborJezika']}"/> 
+                </h:form>
+            </div>
+        <br/>
+
+        </h:body>
+    </f:view>
+</html>
