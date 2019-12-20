@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view locale="#{lokalizacija.jezik}" contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>#{in['stranice.pregledLetovaAviona']}</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    #{in['stranice.pregledLetovaAviona']}
+                </p:layoutUnit>
+                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                    <p:menu>
+                        <p:submenu label="#{in['label.izbornik']}">
+                            <p:menuitem value="#{in['stranice.pregledVlastitihAerodroma']}" url="/faces/pregledVlastitihLetovaAerodroma.xhtml"/>
+                            <p:menuitem value="#{in['stranice.pocetna']}" url="/faces/index.xhtml" />
+                            <p:menuitem value="#{in['stranice.odjava']}" url="/faces/odjava.xhtml" />
+                        </p:submenu>
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form id="forma">
+                        
+                        <h:panelGroup>
+                                <p:dataTable id="tablicaLetova" value="#{pregledLetova.listaLetova}" var="let">
+                                    <p:column id="icao24" headerText="ICAO24">
+                                        #{let.icao24}
+                                    </p:column>
+                                    <p:column id="vrijemePolijetanja" headerText="#{in['tablica.vrijemePolaska']}">
+                                        #{letoviAerodrom.dajDatumIzEpoch(let.firstSeen)}
+                                    </p:column>
+                                    <p:column id="vrijemeSlijetanja" headerText="#{in['tablica.vrijemeDolaska']}">
+                                        #{letoviAerodrom.dajDatumIzEpoch(let.lastSeen)}
+                                    </p:column>
+                                    <p:column id="aerodromSlijetanja" headerText="#{in['tablica.odredisni']}">
+                                        #{let.estDepartureAirport}
+                                    </p:column>
+                                </p:dataTable>
+                                
+                                <h:panelGroup>
+                                    <h:commandButton id="prevLet" value="#{in['tablica.prethodna']}" action="#{pregledLetova.prevPage()}">
+                                        <f:ajax event="action" render="tablicaLetova curPageLet numOfPagesLet"/>
+                                    </h:commandButton>
+
+                                    <p:outputLabel id="curPageLet" value="#{pregledLetova.trenutnaStranica}"/> /
+                                    <p:outputLabel id="numOfPagesLet" value="#{pregledLetova.ukBrojStr}"/>
+
+                                    <h:commandButton id="nextLet" value="#{in['tablica.sljedeca']}" action="#{pregledLetova.nextPage()}">
+                                        <f:ajax event="action" render="tablicaLetova curPageLet numOfPagesLet"/>
+                                    </h:commandButton>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+

@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view locale="#{lokalizacija.jezik}" contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>#{in['stranice.promijeniPodatke']}</title>
+            </f:facet>
+        </h:head>
+        
+        <h:body>
+                <p:layout fullPage="true">
+                    <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                        <p:menu>
+                            <p:submenu label="#{in['label.izbornik']}">
+                                <p:menuitem value="#{in['stranice.pocetna']}" url="/faces/index.xhtml" />
+                                <p:menuitem value="#{in['stranice.odjava']}" url="/faces/odjava.xhtml" />
+                            </p:submenu>
+                        </p:menu>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+                        <h:form id="forma">
+                            <p:outputLabel for="newName" value="#{in['korisnik.ime']} "/>
+                            <p:inputText id="newName" placeholder="#{in['placeHolder.enter.new.ime']}" value="#{promjenaPodataka.name}"/> <br/>
+                            
+                            <p:outputLabel for="newSurname" value="#{in['korisnik.prezime']} "/>
+                            <p:inputText id="newSurname" placeholder="#{in['placeHolder.enter.new.prezime']}" value="#{promjenaPodataka.surname}"/> <br/>
+                            
+                            <p:outputLabel for="newUsername" value="#{in['korisnik.korime']} "/>
+                            <p:inputText id="newUsername" placeholder="#{in['placeHolder.enter.new.korime']}" value="#{promjenaPodataka.korime}"/><br/>
+                            
+                            <p:outputLabel for="newPassword" value="#{in['korisnik.lozinka']} "/>
+                            <p:inputText id="newPassword" type="password" placeholder="#{in['placeHolder.enter.new.pw']}" value="#{promjenaPodataka.lozinka}"/> <br/>
+                            
+                            <p:outputLabel for="newEmail" value="#{in['korisnik.email']} "/>
+                            <p:inputText id="newEmail" placeholder="#{in['placeHolder.enter.new.email']}" value="#{promjenaPodataka.email}"/> <br/><br/>
+                            
+                            <h:commandButton id="promjenaPod_btn" value="#{in['btn.azuriraj.podate']}" action="#{promjenaPodataka.azuriraj()}">
+                                <f:ajax event="click" execute="newName newSurname newUsername newPassword newEmail" render="labelAzuriranje"/>
+                            </h:commandButton>
+                            
+                            <h:outputText id="labelAzuriranje" value="#{in[promjenaPodataka.primljenaPoruka]}" />
+                        </h:form>
+                    </p:layoutUnit>
+                </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view locale="#{lokalizacija.jezik}" contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>#{in['stranice.upravljanjeAerodromom']}</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    #{in['stranice.upravljanjeAerodromom']}
+                </p:layoutUnit>
+                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                    <p:menu>
+                        <p:submenu label="#{in['label.izbornik']}">
+                            <p:menuitem value="#{in['stranice.pregledVlastitihAerodroma']}" url="/faces/pregledVlastitihAerodroma.xhtml"/>
+                            <p:menuitem value="#{in['stranice.pocetna']}" url="/faces/index.xhtml" />
+                            <p:menuitem value="#{in['stranice.odjava']}" url="/faces/odjava.xhtml" />
+                        </p:submenu>
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form id="forma">
+                        
+                        ICAO: <p:outputLabel id="trenutniIcao" value="#{aerodromi.odabraniIcao}"/>
+
+                        <h:commandButton id="brisi" value="#{in['btn.brisi']}" action="#{upraljanjeAerodromom.obrisi(aerodromi.odabraniIcao)}">
+                            <f:ajax event="action" render="labelOdgovor"/>
+                        </h:commandButton>
+                        
+                        <h:commandButton id="aktiviraj" value="#{in['btn.aktiviraj']}" action="#{upraljanjeAerodromom.aktiviraj(aerodromi.odabraniIcao)}">
+                            <f:ajax event="action" render="labelOdgovor"/>
+                        </h:commandButton>
+                        
+                        <h:commandButton id="blokiraj" value="#{in['btn.blokiraj']}" action="#{upraljanjeAerodromom.blokiraj(aerodromi.odabraniIcao)}">
+                            <f:ajax event="action" render="labelOdgovor"/>
+                        </h:commandButton>
+                        
+                        <h:commandButton id="status" value="#{in['btn.status']}" action="#{upraljanjeAerodromom.status(aerodromi.odabraniIcao)}">
+                            <f:ajax event="action" render="labelOdgovor"/>
+                        </h:commandButton>
+                        <br/><br/>
+                        <p:inputText id="nazivA" placeholder="#{in['placeHolder.aerodrom.naziv']}" value="#{upraljanjeAerodromom.naziv}"/>
+                        <p:inputText id="adresa" placeholder="#{in['placeHolder.aerodrom.adresa']}" value="#{upraljanjeAerodromom.adresa}"/>
+                        <h:commandButton id="azuriranje" value="#{in['btn.azuriraj.podate']}" action="#{upraljanjeAerodromom.azuriraj(aerodromi.odabraniIcao)}">
+                            <f:ajax event="action" execute="nazivA adresa" render="labelOdgovor"/>
+                        </h:commandButton>
+                        
+                        <p:outputLabel id="labelOdgovor" value="#{in[upraljanjeAerodromom.odgovor]}"/>
+                        
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view locale="#{lokalizacija.jezik}" contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>#{in['stranice.pregledSvihKorisnika']}</title>
+            </f:facet>
+        </h:head>
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    #{in['stranice.pregledSvihKorisnika']}
+                </p:layoutUnit>
+                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                    <p:menu>
+                        <p:submenu label="#{in['label.izbornik']}">
+                            <p:menuitem value="#{in['stranice.pocetna']}" url="/faces/index.xhtml" />
+                            <p:menuitem value="#{in['stranice.odjava']}" url="/faces/odjava.xhtml" />
+                        </p:submenu>
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form id="forma">
+                        <h:commandButton id="preuzmiKorisnike_btn" value="#{in['btn.preuzmi.korisnike']}" action="#{korisnici.preuzmi()}">
+                            <f:ajax event="click" render="tablicaKorisnika numOfPages curPage"/>
+                        </h:commandButton>
+
+                        <h:panelGroup>
+                            <p:dataTable id="tablicaKorisnika" value="#{korisnici.listaKorisnika}" var="korisnik">
+                                <p:column id="ime" headerText="#{in['korisnik.ime']}">
+                                    #{korisnik.ime}
+                                </p:column>
+                                <p:column id="prezime" headerText="#{in['korisnik.prezime']}">
+                                    #{korisnik.prezime}
+                                </p:column>
+                                <p:column id="korime" headerText="#{in['korisnik.korime']}">
+                                    #{korisnik.korime}
+                                </p:column>
+                                <p:column id="email" headerText="#{in['korisnik.email']}">
+                                    #{korisnik.email}
+                                </p:column>
+                                <p:column id="aktivan" headerText="#{in['tablica.korisnik.aktivan']}">
+                                    #{korisnik.active}
+                                </p:column>
+                            </p:dataTable>
+
+                            <h:panelGroup>
+                                <h:commandButton id="prev" value="#{in['tablica.prethodna']}" action="#{korisnici.prevPage()}">
+                                    <f:ajax event="action" render="tablicaKorisnika curPage numOfPages"/>
+                                </h:commandButton>
+
+                                <p:outputLabel id="curPage" value="#{korisnici.trenutnaStranica}"/> /
+                                <p:outputLabel id="numOfPages" value="#{korisnici.ukBrojStr}"/>
+
+                                <h:commandButton id="next" value="#{in['tablica.sljedeca']}" action="#{korisnici.nextPage()}">
+                                    <f:ajax event="action" render="tablicaKorisnika curPage numOfPages"/>
+                                </h:commandButton>
+                            </h:panelGroup>
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+

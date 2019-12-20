@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view locale="#{lokalizacija.jezik}" contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>#{in['stranice.pregledLetovaVLastitihAerodroma']}</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    #{in['stranice.pregledLetovaVLastitihAerodroma']}
+                </p:layoutUnit>
+                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                    <p:menu>
+                        <p:submenu label="#{in['label.izbornik']}">
+                            <p:menuitem value="#{in['stranice.pocetna']}" url="/faces/index.xhtml" />
+                            <p:menuitem value="#{in['stranice.odjava']}" url="/faces/odjava.xhtml" />
+                        </p:submenu>
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form id="forma">
+                        <h:panelGrid>
+                            <h:panelGroup>
+                                <h:commandButton id="preuzmiAerodrome_btn" value="#{in['btn.preuzmi.aerodrome']}" action="#{aerodromi.preuzmi()}">
+                                    <f:ajax event="click" render="tablicaAerodroma numOfPages curPage"/>
+                                </h:commandButton>
+
+                                <h:panelGroup>
+                                    <p:outputLabel for="odVremena" value="#{in['label.odVremena']}"/>
+                                    <p:calendar id="odVremena" converter="#{letoviAerodrom.dateToStr}" pattern="dd-MM-yyyy HH:mm:ss" value="#{letoviAerodrom.odVremena}"/>
+                                    <p:outputLabel for="doVremena" value="#{in['label.doVremena']}"/>
+                                    <p:calendar id="doVremena" converter="#{letoviAerodrom.dateToStr}" pattern="dd-MM-yyyy HH:mm:ss" value="#{letoviAerodrom.doVremena}"/>
+                                </h:panelGroup>
+
+                                <p:dataTable id="tablicaAerodroma" value="#{aerodromi.listaAerodroma}" var="aerodrom">
+                                    <p:column id="icao" headerText="ICAO">
+                                        #{aerodrom.icao}
+                                    </p:column>
+                                    <p:column id="drzava" headerText="#{in['tablica.aerodrom.drzava']}">
+                                        #{aerodrom.drzava}
+                                    </p:column>
+                                    <p:column id="naziv" headerText="#{in['tablica.aerodrom']}">
+                                        #{aerodrom.naziv}
+                                    </p:column>
+                                    <p:column id="long" headerText="#{in['tablica.aerodrom.longitude']}">
+                                        #{aerodrom.longitude}
+                                    </p:column>
+                                    <p:column id="lat" headerText="#{in['tablica.aerodrom.latitude']}">
+                                        #{aerodrom.latitude}
+                                    </p:column>
+                                    <p:column id="akcija" headerText="#{in['tablica.akcija']}">
+                                        <h:commandButton id="preuzmiAvione_btn" value="#{in['btn.preuzmi.avione']}" action="#{letoviAerodrom.preuzmiAvione(aerodrom.icao)}">
+                                            <f:ajax event="action" execute=":forma:odVremena :forma:doVremena" render=":forma:tablicaAviona :forma:numOfPagesAvion"/>
+                                        </h:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+
+                                <h:panelGroup>
+                                    <h:commandButton id="prev" value="#{in['tablica.prethodna']}" action="#{aerodromi.prevPage()}">
+                                        <f:ajax event="action" render="tablicaAerodroma curPage numOfPages"/>
+                                    </h:commandButton>
+
+                                    <p:outputLabel id="curPage" value="#{aerodromi.trenutnaStranica}"/> /
+                                    <p:outputLabel id="numOfPages" value="#{aerodromi.ukBrojStr}"/>
+
+                                    <h:commandButton id="next" value="#{in['tablica.sljedeca']}" action="#{aerodromi.nextPage()}">
+                                        <f:ajax event="action" render="tablicaAerodroma curPage numOfPages"/>
+                                    </h:commandButton>
+                                </h:panelGroup>
+
+                            </h:panelGroup>
+                            <br/><br/>
+                            <h:panelGroup>
+                                <p:dataTable id="tablicaAviona" value="#{letoviAerodrom.listaAviona}" var="avion">
+                                    <p:column id="icao24" headerText="ICAO24">
+                                        #{avion.icao24}
+                                    </p:column>
+                                    <p:column id="vrijemePolijetanja" headerText="#{in['tablica.vrijemePolaska']}">
+                                        #{letoviAerodrom.dajDatumIzEpoch(avion.firstSeen)}
+                                    </p:column>
+                                    <p:column id="vrijemeSlijetanja" headerText="#{in['tablica.vrijemeDolaska']}">
+                                        #{letoviAerodrom.dajDatumIzEpoch(avion.lastSeen)}
+                                    </p:column>
+                                    <p:column id="aerodromSlijetanja" headerText="#{in['tablica.odredisni']}">
+                                        #{avion.estDepartureAirport}
+                                    </p:column>
+                                    <p:column id="akcijaAvion" headerText="#{in['tablica.akcija']}">
+                                        <h:commandButton id="preuzmiLetoveAviona_btn" value="#{in['btn.preuzmi.letoveAviona']}" 
+                                                         action="#{pregledLetova.preuzmi(avion.icao24, letoviAerodrom.odVremena, letoviAerodrom.doVremena)}">
+                                            <f:ajax event="action" execute=":forma:odVremena :forma:doVremena"/>
+                                        </h:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+
+                                <h:panelGroup>
+                                    <h:commandButton id="prevAvion" value="#{in['tablica.prethodna']}" action="#{letoviAerodrom.prevPage()}">
+                                        <f:ajax event="action" render="tablicaAviona curPageAvion numOfPagesAvion"/>
+                                    </h:commandButton>
+
+                                    <p:outputLabel id="curPageAvion" value="#{letoviAerodrom.trenutnaStranica}"/> /
+                                    <p:outputLabel id="numOfPagesAvion" value="#{letoviAerodrom.ukBrojStr}"/>
+
+                                    <h:commandButton id="nextAvion" value="#{in['tablica.sljedeca']}" action="#{letoviAerodrom.nextPage()}">
+                                        <f:ajax event="action" render="tablicaAviona curPageAvion numOfPagesAvion"/>
+                                    </h:commandButton>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+
+                        </h:panelGrid>
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+

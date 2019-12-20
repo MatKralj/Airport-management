@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view locale="#{lokalizacija.jezik}" contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>#{in['stranice.pregledDnevnika']}</title>
+                <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"/>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    #{in['stranice.pregledDnevnika']}
+                </p:layoutUnit>
+                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                    <p:menu>
+                        <p:submenu label="#{in['label.izbornik']}">
+                            <p:menuitem value="#{in['stranice.pocetna']}" url="/faces/index.xhtml" />
+                            <p:menuitem value="#{in['stranice.odjava']}" url="/faces/odjava.xhtml" />
+                        </p:submenu>
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form id="forma">
+                        <h:panelGrid>
+                            <h:panelGroup>
+                                <h:commandButton id="preuzmiDnevnik_btn" value="#{in['btn.preuzmi.dnenvik']}" action="#{pregledDnevnika.preuzmi()}">
+                                    <f:ajax event="click" render="tablicaDnevnik numOfPages curPage"/>
+                                </h:commandButton>
+
+                                <p:dataTable id="tablicaDnevnik" value="#{pregledDnevnika.listaDnevnika}" var="dnevnik">
+                                    <p:column id="url" headerText="#{in['tablica.url']}">
+                                        #{dnevnik.url}
+                                    </p:column>
+                                    <p:column id="poruka" headerText="#{in['tablica.korisnik']}">
+                                        #{dnevnik.korisnik}
+                                    </p:column>
+                                    <p:column id="ipAdresa" headerText="#{in['tablica.ipAdresa']}">
+                                        #{dnevnik.ipAdresa}
+                                    </p:column>
+                                    <p:column id="trajanjeObrade" headerText="#{in['tablica.trajenjObrade']}">
+                                        #{dnevnik.trajanjeobrade}
+                                    </p:column>
+                                    <p:column id="vrijemePrijema" headerText="#{in['tablica.vrijemePrijema']}">
+                                        #{dnevnik.vrijemePrijema}
+                                    </p:column>
+
+                                </p:dataTable>
+
+                                <h:panelGroup>
+                                    <h:commandButton id="prev" value="#{in['tablica.prethodna']}" action="#{pregledDnevnika.prevPage()}">
+                                        <f:ajax event="action" render="tablicaDnevnik curPage numOfPages"/>
+                                    </h:commandButton>
+
+                                    <p:outputLabel id="curPage" value="#{pregledDnevnika.trenutnaStranica}"/> /
+                                    <p:outputLabel id="numOfPages" value="#{pregledDnevnika.ukBrojStr}"/>
+
+                                    <h:commandButton id="next" value="#{in['tablica.sljedeca']}" action="#{pregledDnevnika.nextPage()}">
+                                        <f:ajax event="action" render="tablicaDnevnik curPage numOfPages"/>
+                                    </h:commandButton>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+

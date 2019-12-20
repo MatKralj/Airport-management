@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view locale="#{lokalizacija.jezik}" contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>#{in['stranice.registracija']}</title>
+            </f:facet>
+        </h:head>
+        
+        <h:body>
+                <p:layout fullPage="true">
+                    <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                        <p:menu>
+                            <p:submenu label="#{in['label.izbornik']}">
+                                <p:menuitem value="#{in['stranice.pocetna']}" url="/faces/index.xhtml" />
+                                <p:menuitem value="#{in['stranice.prijava']}" url="/faces/prijava.xhtml" />
+                            </p:submenu>
+                        </p:menu>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+                        <h:form id="forma">
+                            <p:inputText id="name" placeholder="#{in['placeHolder.enter.new.ime']}" value="#{registracija.name}"/> <br/>
+                            <p:inputText id="surname" placeholder="#{in['placeHolder.enter.new.prezime']}" value="#{registracija.surname}"/> <br/>
+                            <p:inputText id="username" placeholder="#{in['placeHolder.enter.new.korime']}" value="#{registracija.korime}"/><br/>
+                            <p:inputText id="password" type="password" placeholder="#{in['placeHolder.enter.new.pw']}" value="#{registracija.lozinka}"/> <br/>
+                            <p:inputText id="passwordRepeat" type="password" placeholder="#{in['placeHolder.reenter.pw']}" value="#{registracija.lozinkaRepeat}"/> <br/>
+                            <p:inputText id="email" placeholder="#{in['placeHolder.enter.new.email']}" value="#{registracija.email}"/> <br/><br/>
+                            
+                            <h:commandButton id="registracija_btn" value="#{in['btn.registrirajSe']}" action="#{registracija.registriraj()}">
+                                <f:ajax event="click" execute="username password passwordRepeat email name surname" render="labelRegistracija"/>
+                            </h:commandButton>
+                            
+                            <h:outputText id="labelRegistracija" value="#{in[registracija.primljenaPoruka]}" />
+                        </h:form>
+                    </p:layoutUnit>
+                </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+
