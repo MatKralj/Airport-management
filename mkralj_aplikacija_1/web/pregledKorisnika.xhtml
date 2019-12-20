@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Pregled korisnika</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                    <p:menu>
+                        <p:submenu label="Izbornik">
+                            <p:menuitem value="Početna" url="index.xhtml"/>
+                            <p:menuitem value="#{prijavaOdjava.radnja}" url="#{prijavaOdjava.urlRadnje}"/>
+                            <p:menuitem value="Pregled dnevnika rada" url="pregledDnevnika.xhtml" />
+                        </p:submenu>
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:panelGrid columns="2">
+                        <h:form id="forma">
+                            
+                            <h:commandButton id="preuzmi" value="Preuzmi korisnike" action="#{pregledKorisnika.preuzmiKorisnike()}">
+                                <f:ajax event="action" render="tablicaKorisnika curPage numOfPages"/>
+                            </h:commandButton>
+                            
+                            <h:panelGroup>
+                                <p:dataTable id="tablicaKorisnika" value="#{pregledKorisnika.listaKorisnika}" var="korisnik">
+                                    <p:column id="korime" headerText="Korisničko ime">
+                                        #{korisnik.korime}
+                                    </p:column>
+                                    <p:column id="ime" headerText="Ime">
+                                        #{korisnik.ime}
+                                    </p:column>
+                                    <p:column id="prezime" headerText="Prezime">
+                                        #{korisnik.prezime}
+                                    </p:column>
+                                    <p:column id="email" headerText="Email adresa">
+                                        #{korisnik.email}
+                                    </p:column>
+                                    <p:column id="status" headerText="Status">
+                                        #{korisnik.active}
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:commandButton id="prev" value="Prethodna" action="#{pregledKorisnika.prevPage()}">
+                                    <f:ajax event="action" render="tablicaKorisnika curPage numOfPages"/>
+                                </h:commandButton>
+                                
+                                <p:outputLabel id="curPage" value="#{pregledKorisnika.trenutnaStranica}"/> /
+                                <p:outputLabel id="numOfPages" value="#{pregledKorisnika.ukBrojStr}"/>
+                                
+                                <h:commandButton id="next" value="Sljedeca" action="#{pregledKorisnika.nextPage()}">
+                                    <f:ajax event="action" render="tablicaKorisnika curPage numOfPages"/>
+                                </h:commandButton>
+                            </h:panelGroup>
+                        </h:form>
+                    </h:panelGrid>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+

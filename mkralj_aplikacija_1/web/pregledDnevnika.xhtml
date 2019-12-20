@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>index</title>
+            </f:facet>
+        </h:head>
+        
+        <h:body>
+                <p:layout fullPage="true">
+                    <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
+                        <p:menu>
+                            <p:submenu label="Izbornik">
+                                <p:menuitem value="Početna" url="index.xhtml" />
+                                <p:menuitem value="#{prijavaOdjava.radnja}" url="#{prijavaOdjava.urlRadnje}"/>
+                                <p:menuitem value="Pregled korisnika" url="pregledKorisnika.xhtml" />
+                            </p:submenu>
+                        </p:menu>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+                        <h:panelGrid columns="2">
+                        <h:form id="forma">
+                            
+                            <h:commandButton id="preuzmiDnevnik" value="Preuzmi dnevnik rada" action="#{pregledDnevnika.preuzmiDnevnikRada()}">
+                                <f:ajax event="action" execute="search odVremena doVremena" render="tablicaDnevnika curPage numOfPages"/>
+                            </h:commandButton>
+                            
+                            <h:panelGroup>
+                                <p:inputText id="search" placeholder="Search..." value="#{pregledDnevnika.dioApp}"/>
+                                <br/>
+                                <p:calendar id="odVremena" converter="#{pregledDnevnika.dateToStr}" pattern="yyyy-MM-dd HH:mm:ss" value="#{pregledDnevnika.odVremena}"/>
+                                <p:calendar id="doVremena" converter="#{pregledDnevnika.dateToStr}" pattern="yyyy-MM-dd HH:mm:ss" value="#{pregledDnevnika.doVremena}"/>
+                            </h:panelGroup>
+                            
+                            <h:panelGroup>
+                                <p:dataTable id="tablicaDnevnika" value="#{pregledDnevnika.listaDnevnika}" var="dnevnik">
+                                    <p:column id="opis" headerText="Opis">
+                                        #{dnevnik.opis}
+                                    </p:column>
+                                    <p:column id="stored" headerText="Spremljeno">
+                                        #{dnevnik.stored}
+                                    </p:column>
+                                    <p:column id="korisnik" headerText="Korisnik">
+                                        #{dnevnik.korime}
+                                    </p:column>
+                                    <p:column id="radnja" headerText="Radnja">
+                                        #{dnevnik.radnja}
+                                    </p:column>
+                                    <p:column id="dioApp" headerText="Dio aplikacije">
+                                        #{dnevnik.dioAplikacije}
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:commandButton id="prev" value="Prethodna" action="#{pregledDnevnika.prevPage()}">
+                                    <f:ajax event="action" execute="search odVremena doVremena" render="tablicaDnevnika curPage numOfPages"/>
+                                </h:commandButton>
+                                
+                                <p:outputLabel id="curPage" value="#{pregledDnevnika.trenutnaStranica}"/> /
+                                <p:outputLabel id="numOfPages" value="#{pregledDnevnika.ukBrojStr}"/>
+                                
+                                <h:commandButton id="next" value="Sljedeca" action="#{pregledDnevnika.nextPage()}">
+                                    <f:ajax event="action" execute="search odVremena doVremena" render="tablicaDnevnika curPage numOfPages"/>
+                                </h:commandButton>
+                            </h:panelGroup>
+                        </h:form>
+                    </h:panelGrid>
+                    </p:layoutUnit>
+                </p:layout>
+        </h:body>
+
+    </f:view>
+</html>
+
